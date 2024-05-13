@@ -151,8 +151,8 @@ class NESTED_CV:
         #print(self.df.head())
         stdScale = StandardScaler().fit(X)
         self.X=stdScale.transform(X)
-        print(self.X)
-        print(X.size)
+        #print(self.X)
+        #print(X.size)
 
 
     def cross_validation(self, input_value):
@@ -220,12 +220,13 @@ class NESTED_CV:
     def results(self):
         #create dataframe with results of nested CV
         list_of_tuples = list(zip(self.itr_number, self.inner_results, self.outer_results, self.model_params, self.y_test_list, self.pred_list))
-        CV_dataset = pd.DataFrame(list_of_tuples)
+        CV_dataset = pd.DataFrame(list_of_tuples, columns=['itr_num', 'Valid Score', 'Test Score', 'params', 'y_test_list', 'pred_list'])
         CV_dataset['Score_difference'] = abs(CV_dataset['Valid Score'] - CV_dataset['Test Score']) #Groupby dataframe model iterations that best fit the data (i.e., validitaion <= test)
         CV_dataset.sort_values(by=['Score_difference', 'Test Score'], ascending=True, inplace=True)
         CV_dataset = CV_dataset.reset_index(drop=True) # Reset index of dataframe
         # save the results as a class object
         self.CV_dataset = CV_dataset
+        print(CV_dataset)
 
     def best_model(self):
         # assign the best model paramaters
